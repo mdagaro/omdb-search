@@ -18,7 +18,7 @@ emitter.on("prompt-complete", (terms) => {
       if (match !== null) {
         link.title = match[1];
         link.year = match[2];
-        console.log(link.link.substring(26,35));
+        link.id = link.link.substring(26,35);
         movie_array.push(link);
       }
     }
@@ -48,8 +48,7 @@ emitter.on("search-complete", (movie_array) => {
       choices = uniq(res);
 
       for(i=0;i < choices.length;++i) {
-        console.log(movie_array[choices[i]].title);
-        request("http://www.omdbapi.com/?" + "i=" + movie_array[choices[i]] + "&plot=short&r=json", displayInfo(err,res));
+        request("http://www.omdbapi.com/?" + "i=" + movie_array[choices[i]].id + "&plot=short&r=json", displayInfo);
       }
     });
   }
@@ -63,7 +62,7 @@ function regex_gen(num) {
   array = num.toString().split("").map(Number);
   reg = [];
   for(var i = 1; i < array.length; ++i) {
-    if (array[i] !== 1) {
+    if (array[i] !== 1 || array.length ===2) {
       reg.push("[0-9]".repeat(i));
     }
   }
@@ -71,7 +70,7 @@ function regex_gen(num) {
   if (array[0] == 1) {
     for(i = 1; i < array.length; ++i) {
       if (array[i] - 1 === 0) {
-        reg.push(array.slice(0,i).join("") + "0[0-9]".repeat(num_left-1));
+        reg.push(array.slice(0,i).join("") + "0" + "[0-9]".repeat(num_left-1));
         num_left -= 1;
       }
       else if(array[i] === 0) {
@@ -86,7 +85,7 @@ function regex_gen(num) {
   else {
     for(i = 0; i<array.length;++i) {
       if (array[i] - 1 === 0) {
-        reg.push(array.slice(0,i).join("") + "0[0-9]".repeat(num_left));
+        reg.push(array.slice(0,i).join("") + "0" + "[0-9]".repeat(num_left));
         num_left -= 1;
       }
       else if(array[i] === 0) {
@@ -99,8 +98,7 @@ function regex_gen(num) {
       }
     }
   }
-
-  reg = reg.join("|").replace("|[0-1]","|1");
+  reg = reg.join("|");
   console.log(reg);
   return "^(" + reg + ")(,(" + reg + "))*$";
 }
@@ -113,10 +111,20 @@ function uniq(a) {
 }
 
 function displayInfo(err,res) {
-  console.log(res.statusCode);
-  if(err !== null && res.statusCode == 200) {
-    var data = JSON.parse(res);
-    console.log(JSON.stringify(data,null,'\t'));
+  if(err === null && res.statusCode === 200) {
+    var data = JSON.parse(res.body);
+    if (data.Response == 'True') {
+      var replacements = {
+        "%TITLE%" : data.Title,
+        "%YEAR%" : data.Year,
+        "%IMDB_RATING%" : data.imdbRating,
+        "%SUMMARY%" : data.Plot
+      };
+      var output = "%TITLE% (%YEAR%) : \n\t%SUMMARY%\n\tRating on IMDb: %IMDB_RATING%";
+      console.log(output.replace(/%\w+%/g, function(all) {
+        return replacements[all] || all;
+      }));
+    }
   }
 }
 
