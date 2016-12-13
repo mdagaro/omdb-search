@@ -1,18 +1,22 @@
 {
-  "init_options" : {
-    "search" : {
-      "properties" : {
-        "description" : "Enter search terms",
-        "required" : true
-      }
-    }
+  "name": "omdb-search",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index"
   },
-  "movie_options" : {
-    "selection" : {
-      "properties" : {
-        "description" : "Enter number of select movies",
-        "required" : true
-      }
-    }
-  }
+  "author": "potatopeno",
+  "license": "ISC",
+  "dependencies": {
+    "google": "^2.1.0",
+    "prompt": "^1.0.0",
+    "request": "^2.79.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "\u0016https://github.com/potatopeno/omdb-search"
+  },
+  "description": ""
 }
