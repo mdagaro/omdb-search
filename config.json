@@ -1,0 +1,18 @@
+{
+  "init_options" : {
+    "search" : {
+      "properties" : {
+        "description" : "Enter search terms",
+        "required" : true
+      }
+    }
+  },
+  "movie_options" : {
+    "selection" : {
+      "properties" : {
+        "description" : "Enter number of select movies",
+        "required" : true
+      }
+    }
+  }
+}
