@@ -99,7 +99,6 @@ function regex_gen(num) {
     }
   }
   reg = reg.join("|");
-  console.log(reg);
   return "^(" + reg + ")(,(" + reg + "))*$";
 }
 
