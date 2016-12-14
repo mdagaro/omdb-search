@@ -120,7 +120,7 @@ function displayInfo(err,res) {
         "%SUMMARY%" : data.Plot,
         "%GENRE%" : data.Genre
       };
-      var output = "%TITLE% (%YEAR%) : \n\n\tGenre: %GENRE%\n\tSummary: %SUMMARY%\n\tRating on IMDb: %IMDB_RATING%";
+      var output = "%TITLE% (%YEAR%) : \n\n\tGenre: %GENRE%\n\tSummary: %SUMMARY%\n\tRating on IMDb: %IMDB_RATING%\n";
       console.log(output.replace(/%\w+%/g, function(all) {
         return replacements[all] || all;
       }));
